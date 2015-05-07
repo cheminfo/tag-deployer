@@ -1,0 +1,18 @@
+{
+  "repo": "./repo",
+  "repos": [
+    {
+      "url": "/my/local/git/repository",
+      "dest": "path/to/my/deploy/destination",
+      "build": "command to execute inside the deployed repository"
+    },
+    {
+      "url": "https://github.com/my/repository",
+      "dest": "my/deploy/path"
+    },
+    {
+      "url": "git@github.com:cheminfo/tag-deployer.git",
+      "dest": "my/deploy/path"
+    }
+  ]
+}

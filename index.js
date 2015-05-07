@@ -152,35 +152,3 @@ function doBuild(repo, dir) {
         });
     });
 }
-
-//function processFolders(repo) {
-//    return new Promise(function (resolve, reject) {
-//        var walker = walk.walk(repo.destDir, {followLinks: false});
-//        walker.on('file', function(root, fileStat, next) {
-//            if(fileStat.name !== 'folder.json') return next();
-//            console.log('found folder.json', root);
-//            fs.readFile(join(root, 'folder.json'), {encoding: 'utf-8'}, function(err, folderJson) {
-//                if(err) reject(err);
-//                var version = path.relative(repo.destDir, root).replace(/([^\/]*)\/.*$/, '$1');
-//                var reg = new RegExp('HEAD', 'g');
-//                console.log(reg);
-//                folderJson = folderJson.replace(reg, version);
-//                fs.writeFile(join(root, 'folder.json'), folderJson, function(err) {
-//                    if(err) return reject(err);
-//                    next();
-//                });
-//            });
-//        });
-//        walker.on('error',function (root, nodeStatsArray, next) {
-//            nodeStatsArray.forEach(function (n) {
-//                console.error("[ERROR] " + n.name)
-//                console.error(n.error.message || (n.error.code + ": " + n.error.path));
-//            });
-//            next();
-//        });
-//
-//        walker.on('end', function() {
-//            resolve();
-//        });
-//    });
-//}
