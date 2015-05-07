@@ -8,7 +8,6 @@ try {
 }
 catch(e) {
     console.log('config.json does not exist or is an invalid json file');
-    process.exit(0);
 }
 
 if(!Array.isArray(config.repos)){
@@ -37,7 +36,6 @@ for(let i=0 ;i<config.repos.length ;i++) {
     r.isNew = !fs.existsSync(r.repoDir);
     r.build = repo.build;
     conf.push(r);
-    console.log(r);
 }
 
 module.exports = conf;

@@ -1,15 +1,30 @@
 'use strict';
 
 const fs = require('fs-extra');
+const path = require('path');
+const join = path.join;
 const Promise = require('bluebird');
 const url = require('url');
 const walk = require('walk');
 const child_process = require('child_process');
 const execFile = child_process.execFile;
-const config = require('./config');
-const path = require('path');
-const join = path.join;
 const co = require('co');
+const pid = require('./pid');
+
+if(pid.exists()) {
+    console.log('Process already running');
+    process.exit(0);
+}
+
+pid.create();
+
+process.on('uncaughtException', function(e) {
+    console.log('Uncaught exception', e, e.stack);
+    pid.remove();
+});
+
+const config = require('./config');
+
 
 function clone(repo) {
     return new Promise(function(resolve, reject) {
@@ -61,6 +76,9 @@ function getTags(repo) {
                     sha: x[0],
                     tag: x[1].match(/\/([^\/]+)$/)[1]
                 }
+            }).filter(function(v) {
+                var dir = join(repo.destDir, v.tag);
+                return !fs.existsSync(dir);
             });
             resolve(r);
         })
@@ -70,16 +88,13 @@ function getTags(repo) {
 function cloneTags(repo, tags) {
     var prom = [];
     for(let i=0; i<tags.length; i++) {
-        console.log(tags[i]);
         // Already exists
         let dir = join(repo.destDir, tags[i].tag);
-        if(fs.existsSync(dir)) continue;
         var p = new Promise(function(resolve, reject) {
             fs.mkdirpSync(repo.destDir);
             var options = {
                 cwd: repo.destDir
             };
-            console.log(options);
             execFile('git', ['clone', '--depth', '1', '-b', tags[i].tag, repo.url, tags[i].tag], options, function(err) {
                 if(err) return reject(err);
                 fs.remove(join(dir, '.git'), function(err) {
@@ -113,27 +128,26 @@ function *doAll() {
 }
 
 function *doOne(repo) {
-    try {
-        var out = yield updateRepo(repo);
-        if(out.indexOf('Already up-to-date') > -1) console.log('nothing to do');
+        yield updateRepo(repo);
         yield copyHead(repo);
         var tags = yield getTags(repo);
         yield cloneTags(repo, tags);
         yield buildTags(repo, tags);
         yield doBuild(repo, join(repo.destDir, 'HEAD'));
-    } catch(e) {
-        console.log('error occured', e);
-    }
 }
 
 co(function*() {
     yield doAll();
+    pid.remove();
+}).catch(function(e) {
+    console.log('Caught exception', e, e.stack);
+    pid.remove();
 });
 
 function *buildTags(repo, tags) {
-    console.log(repo);
     for(let i=0; i<tags.length; i++) {
-        yield doBuild(repo, join(repo.destDir, tags[i].tag));
+        let dir = join(repo.destDir, tags[i].tag);
+        yield doBuild(repo, dir);
     }
 }
 
