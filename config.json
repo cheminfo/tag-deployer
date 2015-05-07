@@ -1,0 +1,14 @@
+{
+  "repo": "./repo",
+  "repos": [
+    {
+      "url": "/home/stropitek/projects/module-perfume-editor",
+      "dest": "./deploy/firmenich/perfume_editor",
+      "build": "npm install; npm run build -- --wwwroot=/home/stropitek/projects/"
+    },
+    {
+      "url": "/home/stropitek/projects/equilibrium-js",
+      "dest": "./deploy/equilibrium"
+    }
+  ]
+}
