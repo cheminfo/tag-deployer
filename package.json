@@ -1,4 +1,28 @@
 {
+  "name": "tag-deployer",
+  "description": "Node script that locally deploys tagged versions of a github repository",
+  "version": "0.0.1",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cheminfo/tag-deployer.git"
+  },
+  "keywords": [
+    "gihub",
+    "tags",
+    "deploy",
+    "deployer"
+  ],
+  "author": "Daniel Kostro",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cheminfo/tag-deployer/issues"
+  },
+  "homepage": "https://github.com/cheminfo/tag-deployer#readme",
   "dependencies": {
     "bluebird": "^2.9.25",
     "co": "^4.5.4",
