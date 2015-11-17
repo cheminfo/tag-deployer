@@ -7,6 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": "bin/deploy.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cheminfo/tag-deployer.git"
@@ -27,6 +28,7 @@
     "bluebird": "^2.9.25",
     "co": "^4.5.4",
     "fs-extra": "^0.18.2",
+    "minimist": "^1.2.0",
     "semver": "^4.3.4",
     "walk": "^2.3.9"
   }
